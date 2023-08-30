@@ -25,7 +25,7 @@ const MovieScreen = () => {
   const { params: items } = useRoute();
   const navigation = useNavigation();
   const [favorite, setFavorite] = useState(true);
-  const [cast,setCast] = useState([1,2,3,4,5])
+  const [cast, setCast] = useState([1, 2, 3, 4, 5]);
   const [Similar, setSimilar] = useState([1, 2, 3, 4, 5]);
 
   useEffect(() => {}, [items]);
@@ -106,7 +106,11 @@ const MovieScreen = () => {
 
         {/* Description */}
         <Text className="text-neutral-400 mx-4 tracking-wider">
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry's standard dummy text ever
+          since the 1500s, when an unknown printer took a galley of type and
+          scrambled it to make a type specimen book. It has survived not only
+          five centuries
         </Text>
 
         {/* Cast */}
