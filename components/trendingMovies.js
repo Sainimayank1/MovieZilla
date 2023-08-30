@@ -1,9 +1,17 @@
+import { useNavigation } from '@react-navigation/native'
 import React from 'react'
-import { Dimensions, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import { Dimensions, Text , Image, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import Carousel from 'react-native-snap-carousel'
 
-var {height,widht} = Dimensions.get("window")
+var {height,width} = Dimensions.get("window")
 const TrendingMovies = ({data}) => {
+    const navigation  = useNavigation();
+
+    const handleClick = (item) =>
+    {
+        navigation.navigate("Movies",item);
+    }
+
     return (
         <View className="mb-8">
         <Text className="text-white text-xl mx-4 mb-5">
@@ -11,11 +19,11 @@ const TrendingMovies = ({data}) => {
         </Text>
             <Carousel 
             data={data}
-            renderItem={({item})=><MovieCard item={item}/>}
+            renderItem={({item})=><MovieCard item={item} handleClick={handleClick}/>}
             firstItem={1}
             inactiveSlideOpacity={0.60}
-            sliderWidth={600}
-            itemWidth={400}
+            sliderWidth={width}
+            itemWidth={width*0.62}
             slideStyle={{display:"flex",alignItems:"center"}}
             >
 
@@ -24,11 +32,19 @@ const TrendingMovies = ({data}) => {
   )
 }
 
-const MovieCard = ({item}) =>
+const MovieCard = ({item,handleClick}) =>
 {
     return (
-        <TouchableWithoutFeedback>
-            <Text className="text-white">Movie</Text>
+        <TouchableWithoutFeedback onPress={()=>handleClick(item)} >
+            <Image
+            source={require("../assets/images/moviePoster1.png")}
+
+            style={{
+            width:width*0.6,
+            height:height*0.5
+            }}
+            className="rounded-3xl">
+            </Image>
         </TouchableWithoutFeedback>
     )
 } 
