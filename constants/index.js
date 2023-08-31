@@ -1,4 +1,4 @@
-export const apiKey = 'place your api key here from : https://www.themoviedb.org';
+export const apiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5MDRiOGU0MTIxY2I1YWQ2MDZiNGQwN2I3OTRkOTYyOSIsInN1YiI6IjY0ZjAxOWNmOTdhNGU2MDEzODk1ODQwOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.9Nrg-r9OWEmS9P8r9IvtM_luZwHDvypzMHdovj846vk';
 
 
 export const moviesData=[

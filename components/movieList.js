@@ -10,12 +10,12 @@ import {
 } from "react-native";
 import { styles } from "../theme";
 import { useNavigation } from "@react-navigation/native";
+import { Image342 } from "../api";
 
 var { height, width } = Dimensions.get("window");
 
 const MovieList = ({ data, title, hideSeeAll }) => {
   const navigation = useNavigation();
-  var movieName = "Ant man 3 , the new world";
 
   const handleClick = (item) => {
     navigation.push("Movies", item);
@@ -52,7 +52,7 @@ const MovieList = ({ data, title, hideSeeAll }) => {
             >
               <View className="space-y-1 mr-4 mt-4">
                 <Image
-                  source={require("../assets/images/moviePoster2.png")}
+                  source={{uri:Image342(item.poster_path)}}
                   style={{
                     width: width * 0.33,
                     height: height * 0.22,
@@ -61,9 +61,9 @@ const MovieList = ({ data, title, hideSeeAll }) => {
                   className="rounded-2xl"
                 ></Image>
                 <Text className="text-neutral-300 ml-1">
-                  {movieName.length > 14
-                    ? movieName.slice(0, 14) + "..."
-                    : movieName}
+                  {item.original_title.length > 14
+                    ? item.original_title.slice(0, 14) + "..."
+                    : item.original_title}
                 </Text>
               </View>
             </TouchableWithoutFeedback>
