@@ -43,7 +43,6 @@ const MovieList = ({ data, title, hideSeeAll }) => {
         contentContainerStyle={{ paddingHorizontal: 15 }}
       >
         {data.map((item, index) => {
-          console.log(item)
           return (
             <TouchableWithoutFeedback
               key={index}

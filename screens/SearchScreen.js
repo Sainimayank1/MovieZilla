@@ -9,26 +9,39 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XMarkIcon } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../components/Loading";
+import { Image342, fetchSearchData } from "../api";
 
 var { height, width } = Dimensions.get("window");
 const ios = Platform.OS == "ios";
 
 const SearchScreen = () => {
-  const movieName = "Ant Man ^ **sadsssssssss**8 7";
   const navigation = useNavigation();
-  const [Result, setResults] = useState([1, 2, 3, 4, 5]);
+  const [search,setSearch] = useState("");
+  const [Result, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  useEffect(()=>
+  {
+    getSearchData();
+
+  },[search])
+
+  const getSearchData = async () =>
+  {
+      const data = await fetchSearchData(search)
+      setResults(data.results)
+  }
 
   return (
     <SafeAreaView className="bg-neutral-800 flex-1">
       {/* // SearchBar */}
       <View className="mx-4 mb-3 flex-row justify-between items-center border border-neutral-500 rounded-full">
-        <TextInput
+        <TextInput onChangeText={(value)=>setSearch(value)}
           placeholder="Search Movie"
           placeholderTextColor={"lightgray"}
           className="pb-1 pl-6 flex-1 font-semibold text-base text-white tracking-wider"
@@ -60,18 +73,18 @@ const SearchScreen = () => {
                 <TouchableWithoutFeedback
                   key={index}
                   onPress={() => {
-                    navigation.navigate("push", item);
+                    navigation.navigate("Movies", item);
                   }}
                 >
                   <View className="space-y-2 mb-4">
                     <Image
-                      source={require("../assets/images/moviePoster2.png")}
+                      source={{uri:Image342(item.poster_path)}}
                       style={{ width: width * 0.44, height: height * 0.3 }}
                     ></Image>
                     <Text className="text-neutral-300 ml-1">
-                      {movieName.length > 27
-                        ? movieName.slice(0, 22) + "...."
-                        : movieName}
+                      {item.original_title.length > 27
+                        ? item.original_title.slice(0, 22) + "...."
+                        : item.original_title}
                     </Text>
                   </View>
                 </TouchableWithoutFeedback>

@@ -16,7 +16,7 @@ import { styles, theme } from "../theme";
 import { LinearGradient } from "expo-linear-gradient";
 import Cast from "../components/Cast";
 import MovieList from "../components/movieList";
-import { Image500, fetchMovieDetail } from "../api";
+import { Image500, fetchMovieCredits, fetchMovieDetail, fetchMovieSimilar } from "../api";
 
 var { height, width } = Dimensions.get("window");
 const ios = Platform.OS == "ios";
@@ -33,13 +33,25 @@ const MovieScreen = () => {
 
   useEffect(() => {
     getMovieDetail(items.id);
+    getMovieCredits(items.id);
+    getMovieSimilar(items.id);
   }, [items]);
 
   const getMovieDetail = async (id) => {
     const data = await fetchMovieDetail(id);
-    console.log(data)
     setDetails(data);
   };
+
+  const getMovieCredits = async (id) =>{
+    const data = await fetchMovieCredits(id);
+    setCast(data.cast);
+  }
+
+  const getMovieSimilar = async (id) =>
+  {
+    const data = await fetchMovieSimilar(id);
+    setSimilar(data.results);
+  }
 
   return (
     <ScrollView
@@ -100,14 +112,14 @@ const MovieScreen = () => {
 
         {/* Status , release , runtime */}
         <Text className="text-center text-neutral-400 font-semibold text-base">
-          Release {details.release_date} , {details.runtime} min
+          {details.status}. {details.release_date} , {details.runtime} min
         </Text>
 
         {/* Genres */}
         <View className="flex-row justify-center mx-4 space-x-4">
-          {details.genres && details.genres.map((genre) => {
+          {details.genres && details.genres.map((genre,index) => {
             return (
-              <Text className="text-center text-neutral-400 font-semibold text-base">
+              <Text key={index}  className="text-center text-neutral-400 font-semibold text-base">
                 {genre.name}
               </Text>
             );
