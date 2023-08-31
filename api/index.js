@@ -5,6 +5,7 @@ const link = "https://api.themoviedb.org/";
 const trendingMoviesEndPoint = `${link}3/trending/movie/day`;
 const upcomingMoviesEndPoint = `${link}3/movie/upcoming?api_key=${apiKey}`;
 const topRatedMoviesEndPoint = `${link}3/movie/top_rated?api_key=${apiKey}`;
+const MovieDetails = `${link}3/movie/`
 
 const apiCal = async (endPoint, params) => {
   const options = {
@@ -37,6 +38,12 @@ export const fetchUpcomingMovies = () => {
 export const fetchTopRatedMovies = () => {
   return apiCal(topRatedMoviesEndPoint);
 };
+
+export const fetchMovieDetail = (id) =>
+{
+    const endPoint =  `${link}3/movie/${id}`;
+    return apiCal(endPoint);
+}
 
 
 export const Image500 = path => path ? `https://image.tmdb.org/t/p/w500/${path}` : null;

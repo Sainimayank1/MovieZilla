@@ -16,6 +16,7 @@ import { styles, theme } from "../theme";
 import { LinearGradient } from "expo-linear-gradient";
 import Cast from "../components/Cast";
 import MovieList from "../components/movieList";
+import { Image500, fetchMovieDetail } from "../api";
 
 var { height, width } = Dimensions.get("window");
 const ios = Platform.OS == "ios";
@@ -25,10 +26,21 @@ const MovieScreen = () => {
   const { params: items } = useRoute();
   const navigation = useNavigation();
   const [favorite, setFavorite] = useState(true);
-  const [cast, setCast] = useState([1, 2, 3, 4, 5]);
-  const [Similar, setSimilar] = useState([1, 2, 3, 4, 5]);
+  const [details, setDetails] = useState({});
+  const [cast, setCast] = useState([]);
+  const [Similar, setSimilar] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {}, [items]);
+  useEffect(() => {
+    getMovieDetail(items.id);
+  }, [items]);
+
+  const getMovieDetail = async (id) => {
+    const data = await fetchMovieDetail(id);
+    console.log(data)
+    setDetails(data);
+  };
+
   return (
     <ScrollView
       contentContainerStyle={{ paddingBottom: 20 }}
@@ -66,7 +78,7 @@ const MovieScreen = () => {
         {/* Poster */}
         <View>
           <Image
-            source={require("../assets/images/moviePoster2.png")}
+            source={{ uri: Image500(details.poster_path) }}
             style={{ width, height: height * 0.55 }}
           ></Image>
           <LinearGradient
@@ -83,34 +95,30 @@ const MovieScreen = () => {
       <View style={{ marginTop: -(height * 0.09) }} className="space-y-4 ">
         {/* Title */}
         <Text className="text-3xl text-center text-white font-bold tracking-wider">
-          Ant man 3
+          {details.original_title}
         </Text>
 
         {/* Status , release , runtime */}
         <Text className="text-center text-neutral-400 font-semibold text-base">
-          release 2023 , 173 min
+          Release {details.release_date} , {details.runtime} min
         </Text>
 
         {/* Genres */}
         <View className="flex-row justify-center mx-4 space-x-4">
-          <Text className="text-center text-neutral-400 font-semibold text-base">
-            Action *
-          </Text>
-          <Text className="text-center text-neutral-400 font-semibold text-base">
-            Trill *
-          </Text>
-          <Text className="text-center text-neutral-400 font-semibold text-base">
-            Adventure
-          </Text>
+          {details.genres && details.genres.map((genre) => {
+            return (
+              <Text className="text-center text-neutral-400 font-semibold text-base">
+                {genre.name}
+              </Text>
+            );
+          })}
         </View>
 
         {/* Description */}
         <Text className="text-neutral-400 mx-4 tracking-wider">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries
+          {
+            details.overview
+          }
         </Text>
 
         {/* Cast */}
