@@ -1,5 +1,6 @@
 import { View, Text, Image, TextInput, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -7,25 +8,81 @@ import {
 import { height } from "deprecated-react-native-prop-types/DeprecatedImagePropType";
 import { theme } from "../theme";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { EyeIcon, EyeSlashIcon } from "react-native-heroicons/solid";
+import { EyeIcon, EyeSlashIcon , XMarkIcon } from "react-native-heroicons/solid";
 import { useNavigation } from "@react-navigation/native";
+import { PostLoginData } from "../api";
+import Modal from "react-native-modal";
 
 const LoginScreen = () => {
   const [isVisible, SetVisible] = useState(false);
   const navigation = useNavigation();
+  const [data, setData] = useState({ email: "", password: "" });
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [isError,setIsError] = useState(true);
+  const [msg,setMsg] = useState("");
+
+  useEffect(()=>
+  {
+     async function get()
+     {
+        try {
+          const data =  await AsyncStorage.getItem("movieZilla")
+          if(data)
+          {
+            navigation.navigate("Home")
+          }
+        } catch (error) {
+            console.log(error)
+        }
+     }
+     get();
+  },[])
+
+  const handleSubmit = async () => {
+    const resp = await PostLoginData(data);
+    if (resp.status == 400) {
+      setIsError(true);
+    } else {
+      setIsError(false);
+      const data = JSON.stringify(resp.data.details);
+      await AsyncStorage.setItem("movieZilla",data)
+    }
+    setModalVisible(true)
+    setMsg(resp.data.msg);
+  };
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
 
   return (
     <View
       style={{ height: hp(110), width: wp(100) }}
       className="bg-neutral-100"
     >
+
+      {/* Modal */}
+      <Modal isVisible={isModalVisible} backdropColor="transparent">
+        <View className="flex-1 flex items-center justify-center  ">
+          <View className=" flex-col p-4 rounded-2xl space-y-3 bg-white/100 " style={{ height: hp(20), width: wp(80) }}>
+          <TouchableOpacity className="flex items-end" title="Hide modal" onPress={toggleModal}><XMarkIcon color={"black"} size={35}/></TouchableOpacity> 
+          <Text className={isError ? "text-red-500 text-2xl font-bold tracking-widest" : "text-green-600 text-2xl font-bold tracking-widest"}>{isError ? "Error" : "Success"}</Text>
+          <Text className="text-md text-neutral-500">{msg}</Text>
+          </View>
+        </View>
+      </Modal>
+
+
       {/* Upper section */}
-      <View style={{ height: hp(40) }} className="bg-onahau-100 flex-row items-end justify-center">
-          <Image
-            source={require("../assets/images/personwithlap.png")}
-            style={{ width: wp(60), height: wp(60), opacity: 1 }}
-            className=""
-          ></Image>
+      <View
+        style={{ height: hp(40) }}
+        className="bg-onahau-100 flex-row items-end justify-center"
+      >
+        <Image
+          source={require("../assets/images/personwithlap.png")}
+          style={{ width: wp(60), height: wp(60), opacity: 1 }}
+          className=""
+        ></Image>
       </View>
 
       {/* Lower sectiorn */}
@@ -38,54 +95,56 @@ const LoginScreen = () => {
 
         {/* Lower lower section */}
         <View className="space-y-4 h-full">
+          {/* EMail */}
+          <View className="w-full border border-neutral-400 rounded-lg p-2">
+            <TextInput
+              placeholder="Email"
+              className=" text-lg"
+              onChangeText={(text) => setData({ ...data, email: text })}
+            ></TextInput>
+          </View>
 
+          {/* Password */}
+          <View className="w-full border border-neutral-400 rounded-lg flex-row justify-between items-center p-2">
+            <TextInput
+              placeholder="Password"
+              secureTextEntry={!isVisible}
+              className=" text-lg flex-1"
+              onChangeText={(text) => setData({ ...data, password: text })}
+            ></TextInput>
+            {isVisible ? (
+              <TouchableOpacity onPress={() => SetVisible(!isVisible)}>
+                <EyeIcon color={"black"}></EyeIcon>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => SetVisible(!isVisible)}>
+                <EyeSlashIcon color={"black"}></EyeSlashIcon>
+              </TouchableOpacity>
+            )}
+          </View>
 
-        
-        {/* EMail */}
-        <View className="w-full border border-neutral-400 rounded-lg p-2">
-          <TextInput
-            placeholder="Email"
-            className=" text-lg  "
-          ></TextInput>
-        </View>
-
-        {/* Password */}
-        <View className="w-full border border-neutral-400 rounded-lg flex-row justify-between items-center p-2">
-          <TextInput
-            placeholder="Password"
-            secureTextEntry={!isVisible}
-            className=" text-lg flex-1"
-          ></TextInput>
-          {isVisible ? (
-            <TouchableOpacity onPress={() => SetVisible(!isVisible)}>
-              <EyeIcon color={"black"}></EyeIcon>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity onPress={() => SetVisible(!isVisible)}>
-              <EyeSlashIcon color={"black"}></EyeSlashIcon>
-            </TouchableOpacity>
-          )}
-        </View>
-
-        {/* Button */}
-        <TouchableOpacity className="bg-onahau-200 p-2 rounded-lg">
-          <Text className="text-center text-xl font-bold">Log in</Text>
-        </TouchableOpacity>
-
-        {/* Register */}
-        <View className="flex-row items-center justify-center">
-          <Text className=" text-neutral-400 text-lg font-semibold p-2 ">
-            Don't have an account?
-          </Text>
+          {/* Button */}
           <TouchableOpacity
-            onPress={() => navigation.push("Register")}
-            className="flex items-center"
+            className="bg-onahau-200 p-2 rounded-lg"
+            onPress={() => handleSubmit()}
           >
-            <Text className="text-onahau-500 text-center text-lg">
-              Register
-            </Text>
+            <Text className="text-center text-xl font-bold">Log in</Text>
           </TouchableOpacity>
-        </View>
+
+          {/* Register */}
+          <View className="flex-row items-center justify-center">
+            <Text className=" text-neutral-400 text-lg font-semibold p-2 ">
+              Don't have an account?
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.push("Register")}
+              className="flex items-center"
+            >
+              <Text className="text-onahau-500 text-center text-lg">
+                Register
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>

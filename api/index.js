@@ -5,7 +5,7 @@ const link = "https://api.themoviedb.org/";
 const trendingMoviesEndPoint = `${link}3/trending/movie/day`;
 const upcomingMoviesEndPoint = `${link}3/movie/upcoming?api_key=${apiKey}`;
 const topRatedMoviesEndPoint = `${link}3/movie/top_rated?api_key=${apiKey}`;
-const MovieDetails = `${link}3/movie/`;
+const serverBaseLink = "https://moviezilla-jfh9.onrender.com/";
 
 const apiCal = async (endPoint, params) => {
   const options = {
@@ -24,6 +24,15 @@ const apiCal = async (endPoint, params) => {
   } catch (error) {
     console.error(error);
     return {};
+  }
+};
+
+const apiCalUser = async (endPoint, data) => {
+  try {
+    const resp = await axios.post(endPoint,data);
+    return resp
+  } catch (error) {
+    return error.response;
   }
 };
 
@@ -66,8 +75,18 @@ export const fetchCharacterMovies = (id) => {
 
 export const fetchSearchData = (search) => {
   const endPoint = `${link}3/search/movie`;
-  const params = {query: search, include_adult: 'false', language: 'en-US', page: '1'};
-  return apiCal(endPoint,params);
+  const params = {
+    query: search,
+    include_adult: "false",
+    language: "en-US",
+    page: "1",
+  };
+  return apiCal(endPoint, params);
+};
+
+export const PostLoginData = (data) => {
+  const endPoint = serverBaseLink + "login";
+  return apiCalUser(endPoint, data);
 };
 
 export const Image500 = (path) =>
