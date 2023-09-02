@@ -122,7 +122,7 @@ const PersonScreen = () => {
 
           <View className=" px-4 items-center">
             <Text className="text-white font-semibold">Popularity</Text>
-            <Text className="text-neutral-300 font-xs">{charData.popularity}</Text>
+            <Text className="text-neutral-300 font-xs">{charData.popularity}%</Text>
           </View>
         </View>
       </View>

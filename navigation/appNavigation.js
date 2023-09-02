@@ -5,31 +5,37 @@ import HomeScreen from "../screens/HomeScreen";
 import MovieScreen from "../screens/MovieScreen";
 import PersonScreen from "../screens/PersonScreen";
 import SearchScreen from "../screens/SearchScreen";
+import LoginScreen from "../screens/LoginScreen";
+import RegisterScreen from "../screens/RegisterScreen";
 
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+        />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
+        />
         <Stack.Screen
           name="Home"
-          options={{ headerShown: false }}
           component={HomeScreen}
         />
         <Stack.Screen
           name="Movies"
-          options={{ headerShown: false }}
           component={MovieScreen}
         />
          <Stack.Screen
           name="Person"
-          options={{ headerShown: false }}
           component={PersonScreen}
         />
         <Stack.Screen
           name="Search"
-          options={{ headerShown: false }}
           component={SearchScreen}
         />
       </Stack.Navigator>
