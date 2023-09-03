@@ -11,12 +11,18 @@ import React, { useEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { ChevronLeftIcon } from "react-native-heroicons/outline";
 import { HeartIcon } from "react-native-heroicons/solid";
+import { HeartIcon as HeartIconOutline } from "react-native-heroicons/outline";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles, theme } from "../theme";
 import { LinearGradient } from "expo-linear-gradient";
 import Cast from "../components/Cast";
 import MovieList from "../components/movieList";
-import { Image500, fetchMovieCredits, fetchMovieDetail, fetchMovieSimilar } from "../api";
+import {
+  Image500,
+  fetchMovieCredits,
+  fetchMovieDetail,
+  fetchMovieSimilar,
+} from "../api";
 
 var { height, width } = Dimensions.get("window");
 const ios = Platform.OS == "ios";
@@ -42,21 +48,20 @@ const MovieScreen = () => {
     setDetails(data);
   };
 
-  const getMovieCredits = async (id) =>{
+  const getMovieCredits = async (id) => {
     const data = await fetchMovieCredits(id);
     setCast(data.cast);
-  }
+  };
 
-  const getMovieSimilar = async (id) =>
-  {
+  const getMovieSimilar = async (id) => {
     const data = await fetchMovieSimilar(id);
     setSimilar(data.results);
-  }
+  };
 
   return (
     <ScrollView
       contentContainerStyle={{ paddingBottom: 20 }}
-      className="flex-1 bg-neutral-900 "
+      className="flex-1 bg-white "
     >
       {/* //   Back button with poster */}
 
@@ -69,7 +74,7 @@ const MovieScreen = () => {
           }
         >
           <TouchableOpacity
-            style={styles.background}
+            style={{ backgroundColor: "#02a1d8" }}
             className="rounded-xl p-1"
             onPress={() => navigation.goBack()}
           >
@@ -80,10 +85,11 @@ const MovieScreen = () => {
             ></ChevronLeftIcon>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setFavorite(!favorite)}>
-            <HeartIcon
-              size={35}
-              color={favorite ? theme.background : "white"}
-            ></HeartIcon>
+            {favorite ? (
+              <HeartIcon size={35} color="red"></HeartIcon>
+            ) : (
+              <HeartIconOutline size={35} color="red"></HeartIconOutline>
+            )}
           </TouchableOpacity>
         </SafeAreaView>
 
@@ -94,8 +100,12 @@ const MovieScreen = () => {
             style={{ width, height: height * 0.55 }}
           ></Image>
           <LinearGradient
-            colors={["transparent", "rgba(23,23,23,0.8)", "rgba(23,23,23,1)"]}
-            style={{ width, height: height * 0.4 }}
+            colors={[
+              "transparent",
+              "rgba(255,255,255,0.6)",
+              "rgba(255,255,255,1)",
+            ]}
+            style={{ width, height: height * 0.2 }}
             start={{ x: 0.5, y: 0 }}
             end={{ x: 0.5, y: 1 }}
             className="absolute bottom-0"
@@ -106,31 +116,34 @@ const MovieScreen = () => {
       {/* Movie details */}
       <View style={{ marginTop: -(height * 0.09) }} className="space-y-4 ">
         {/* Title */}
-        <Text className="text-3xl text-center text-white font-bold tracking-wider">
+        <Text className="text-3xl text-center text-neutral-800 font-bold tracking-wider">
           {details.original_title}
         </Text>
 
         {/* Status , release , runtime */}
-        <Text className="text-center text-neutral-400 font-semibold text-base">
+        <Text className="text-center text-neutral-600  font-semibold text-base">
           {details.status}. {details.release_date} , {details.runtime} min
         </Text>
 
         {/* Genres */}
         <View className="flex-row justify-center mx-4 space-x-4">
-          {details.genres && details.genres.map((genre,index) => {
-            return (
-              <Text key={index}  className="text-center text-neutral-400 font-semibold text-base">
-                {genre.name}
-              </Text>
-            );
-          })}
+          {details.genres &&
+            details.genres.map((genre, index) => {
+              return (
+                <Text
+                  key={index}
+                  className="text-center  font-semibold text-base"
+                  style={{color:theme.background}}
+                >
+                  {genre.name}
+                </Text>
+              );
+            })}
         </View>
 
         {/* Description */}
-        <Text className="text-neutral-400 mx-4 tracking-wider">
-          {
-            details.overview
-          }
+        <Text className="text-neutral-600 mx-4 tracking-wider">
+          {details.overview}
         </Text>
 
         {/* Cast */}

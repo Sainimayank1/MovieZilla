@@ -59,21 +59,22 @@ const HomeScreen = () => {
   };
 
   return (
-    <View className="bg-neutral-800 flex-1">
-      <SafeAreaView className={ios ? "-mb-2" : "mb-3"}>
+    // bg-neutral-800
+    <View className=" bg-neutral-100 flex-1">
+      <SafeAreaView className={ios ? "-mb-2 p-2 " : "mb-3 p-2 "}>
         <StatusBar style={styles} />
         <View className="flex-row justify-between items-center mx-4  ">
           {/* Left Icon */}
-          <Bars3CenterLeftIcon strokeWidth={2} size={30} color={"white"} />
+          {/* <Bars3CenterLeftIcon strokeWidth={2} size={30} color={"white"} /> */}
 
           {/* Center Name */}
-          <Text className="text-white text-3xl font-bold">
-            <Text style={styles.text}>M</Text>ovieZilla
+          <Text className="text-neutral-800 text-3xl font-bold">
+            <Text className="text-neutral-900">M</Text>ovieZilla
           </Text>
 
           {/* RIght Icon */}
           <TouchableOpacity onPress={() => navigation.navigate("Search")}>
-            <MagnifyingGlassIcon strokeWidth={2} size={30} color={"white"} />
+            <MagnifyingGlassIcon strokeWidth={2} size={30} color={"black"} />
           </TouchableOpacity>
         </View>
       </SafeAreaView>

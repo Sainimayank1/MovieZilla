@@ -38,13 +38,13 @@ const SearchScreen = () => {
   }
 
   return (
-    <SafeAreaView className="bg-neutral-800 flex-1">
+    <SafeAreaView className="bg-white flex-1">
       {/* // SearchBar */}
-      <View className="mx-4 mb-3 flex-row justify-between items-center border border-neutral-500 rounded-full">
+      <View className="mx-4 mb-3 flex-row justify-between items-center border border-neutral-400 rounded-full">
         <TextInput onChangeText={(value)=>setSearch(value)}
           placeholder="Search Movie"
-          placeholderTextColor={"lightgray"}
-          className="pb-1 pl-6 flex-1 font-semibold text-base text-white tracking-wider"
+          placeholderTextColor={"gray"}
+          className="pb-1 pl-6 flex-1 font-semibold text-base text-neutral-800 tracking-wider"
         ></TextInput>
 
         <TouchableOpacity
@@ -76,12 +76,12 @@ const SearchScreen = () => {
                     navigation.navigate("Movies", item);
                   }}
                 >
-                  <View className="space-y-2 mb-4">
+                  <View className="space-y-2 mb-4 rounded-xl">
                     <Image
                       source={{uri:Image342(item.poster_path)}}
                       style={{ width: width * 0.44, height: height * 0.3 }}
                     ></Image>
-                    <Text className="text-neutral-300 ml-1">
+                    <Text className="text-neutral-700 ml-1">
                       {item.original_title.length > 27
                         ? item.original_title.slice(0, 22) + "...."
                         : item.original_title}

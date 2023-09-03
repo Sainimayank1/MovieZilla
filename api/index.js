@@ -89,6 +89,11 @@ export const PostLoginData = (data) => {
   return apiCalUser(endPoint, data);
 };
 
+export const PostRegitserData = (data) =>{
+  const endPoint = serverBaseLink + "register";
+  return apiCalUser(endPoint, data);
+}
+
 export const Image500 = (path) =>
   path ? `https://image.tmdb.org/t/p/w500/${path}` : null;
 export const Image342 = (path) =>

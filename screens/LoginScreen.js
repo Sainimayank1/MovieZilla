@@ -1,14 +1,11 @@
 import { View, Text, Image, TextInput, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { height } from "deprecated-react-native-prop-types/DeprecatedImagePropType";
-import { theme } from "../theme";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { EyeIcon, EyeSlashIcon , XMarkIcon } from "react-native-heroicons/solid";
+import { EyeIcon, EyeSlashIcon, XMarkIcon } from "react-native-heroicons/solid";
 import { useNavigation } from "@react-navigation/native";
 import { PostLoginData } from "../api";
 import Modal from "react-native-modal";
@@ -18,36 +15,36 @@ const LoginScreen = () => {
   const navigation = useNavigation();
   const [data, setData] = useState({ email: "", password: "" });
   const [isModalVisible, setModalVisible] = useState(false);
-  const [isError,setIsError] = useState(true);
-  const [msg,setMsg] = useState("");
+  const [isError, setIsError] = useState(true);
+  const [msg, setMsg] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
-  useEffect(()=>
-  {
-     async function get()
-     {
-        try {
-          const data =  await AsyncStorage.getItem("movieZilla")
-          if(data)
-          {
-            navigation.navigate("Home")
-          }
-        } catch (error) {
-            console.log(error)
+  useEffect(() => {
+    async function get() {
+      try {
+        const data = await AsyncStorage.getItem("movieZilla");
+        if (data) {
+          // navigation.navigate("Home")
         }
-     }
-     get();
-  },[])
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    get();
+  }, []);
 
   const handleSubmit = async () => {
+    setLoading(true);
     const resp = await PostLoginData(data);
+    setLoading(false);
     if (resp.status == 400) {
       setIsError(true);
     } else {
       setIsError(false);
       const data = JSON.stringify(resp.data.details);
-      await AsyncStorage.setItem("movieZilla",data)
+      await AsyncStorage.setItem("movieZilla", data);
     }
-    setModalVisible(true)
+    setModalVisible(true);
     setMsg(resp.data.msg);
   };
 
@@ -58,30 +55,45 @@ const LoginScreen = () => {
   return (
     <View
       style={{ height: hp(110), width: wp(100) }}
-      className="bg-neutral-100"
+      className="bg-white"
     >
-
       {/* Modal */}
-      <Modal isVisible={isModalVisible} backdropColor="transparent">
+      <Modal isVisible={isModalVisible}>
         <View className="flex-1 flex items-center justify-center  ">
-          <View className=" flex-col p-4 rounded-2xl space-y-3 bg-white/100 " style={{ height: hp(20), width: wp(80) }}>
-          <TouchableOpacity className="flex items-end" title="Hide modal" onPress={toggleModal}><XMarkIcon color={"black"} size={35}/></TouchableOpacity> 
-          <Text className={isError ? "text-red-500 text-2xl font-bold tracking-widest" : "text-green-600 text-2xl font-bold tracking-widest"}>{isError ? "Error" : "Success"}</Text>
-          <Text className="text-md text-neutral-500">{msg}</Text>
+          <View
+            className=" flex-col p-4 rounded-2xl space-y-3 bg-white/100 "
+            style={{ height: hp(20), width: wp(80) }}
+          >
+            <TouchableOpacity
+              className="flex items-end"
+              title="Hide modal"
+              onPress={toggleModal}
+            >
+              <XMarkIcon color={"black"} size={35} />
+            </TouchableOpacity>
+            <Text
+              className={
+                isError
+                  ? "text-red-500 text-2xl font-bold tracking-widest"
+                  : "text-green-600 text-2xl font-bold tracking-widest"
+              }
+            >
+              {isError ? "Error" : "Success"}
+            </Text>
+            <Text className="text-md text-neutral-500">{msg}</Text>
           </View>
         </View>
       </Modal>
 
-
       {/* Upper section */}
       <View
         style={{ height: hp(40) }}
-        className="bg-onahau-100 flex-row items-end justify-center"
+        className=" mb-5 relative bg-onahau-500"
       >
         <Image
           source={require("../assets/images/personwithlap.png")}
           style={{ width: wp(60), height: wp(60), opacity: 1 }}
-          className=""
+          className="absolute -bottom-11 right-1"
         ></Image>
       </View>
 
@@ -125,10 +137,14 @@ const LoginScreen = () => {
 
           {/* Button */}
           <TouchableOpacity
+            disabled={isLoading}
             className="bg-onahau-200 p-2 rounded-lg"
+            style={{backgroundColor:"#0EABF8"}}
             onPress={() => handleSubmit()}
           >
-            <Text className="text-center text-xl font-bold">Log in</Text>
+            <Text className="text-center text-xl font-bold">
+              {isLoading ? "Loading..." : "Log in"}
+            </Text>
           </TouchableOpacity>
 
           {/* Register */}
@@ -140,7 +156,8 @@ const LoginScreen = () => {
               onPress={() => navigation.push("Register")}
               className="flex items-center"
             >
-              <Text className="text-onahau-500 text-center text-lg">
+              <Text className=" text-center text-lg"
+              style={{color:"#0EABF8"}}>
                 Register
               </Text>
             </TouchableOpacity>

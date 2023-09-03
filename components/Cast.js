@@ -16,7 +16,7 @@ const Cast = ({ data }) => {
             return (
               <TouchableOpacity key={index} className="mx-4 items-center" onPress={()=>navigation.navigate("Person",person)}>
                 {/* Image Container */}
-                <View className="rounded-full w-20 h-20 overflow-hidden items-center border border-neutral-500">
+                <View className="rounded-full w-20 h-20 overflow-hidden items-center border border-neutral-800">
                   <Image
                     source={{uri:Image185(person.profile_path)}}
                     className="rounded-2xl h-24 w-20"
@@ -24,7 +24,7 @@ const Cast = ({ data }) => {
                 </View>
 
                 {/* Name */}
-                <Text className="text-neutral-400 text-xs mt-1 ">
+                <Text className="text-neutral-800 text-xs mt-1 ">
                   {person.name > 10
                     ? person.name.slice(0, 10) + ".."
                     : person.name}

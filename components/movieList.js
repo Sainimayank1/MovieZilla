@@ -25,11 +25,11 @@ const MovieList = ({ data, title, hideSeeAll }) => {
     <View className="mb-8">
       <View className="flex-row justify-between items-center mx-4">
         {/* Title */}
-        <Text className="text-white text-xl">{title}</Text>
+        <Text className="text-neutral-800 text-xl">{title}</Text>
 
         {!hideSeeAll && (
           <TouchableOpacity>
-            <Text className="text-lg" style={styles.text}>
+            <Text className="text-lg text-onahau-500" >
               See All
             </Text>
           </TouchableOpacity>
@@ -48,9 +48,11 @@ const MovieList = ({ data, title, hideSeeAll }) => {
               key={index}
               onPress={() => {
                 handleClick(item);
-              }}
+              }
+              }
+              
             >
-              <View className="space-y-1 mr-4 mt-4">
+              <View className="space-y-1 mr-4 mt-4 p-2 rounded-xl" style={{backgroundColor:"#EDEDED"}}>
                 <Image
                   source={{uri:Image342(item.poster_path)}}
                   style={{
@@ -60,7 +62,7 @@ const MovieList = ({ data, title, hideSeeAll }) => {
 
                   className="rounded-2xl"
                 ></Image>
-                <Text className="text-neutral-300 ml-1">
+                <Text className="text-neutral-500 ml-1">
                   {item.original_title
                     ? item.original_title.slice(0, 14) + "..."
                     : item.original_title}
