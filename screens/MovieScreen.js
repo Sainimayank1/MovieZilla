@@ -44,6 +44,15 @@ const MovieScreen = () => {
     getMovieDetail(items.id);
     getMovieCredits(items.id);
     getMovieSimilar(items.id);
+
+    const get = async () => {
+        const data = JSON.parse(await AsyncStorage.getItem("movieZilla"));
+        const isFav = data.favorites.filter((item)=> item.id == items.id)
+        console.log(items.id)
+        if(isFav.length > 0)
+          setFavorite(true);
+    };
+    get();
   }, [items]);
 
   const getMovieDetail = async (id) => {
@@ -61,25 +70,23 @@ const MovieScreen = () => {
     setSimilar(data.results);
   };
 
-  const handleLikeAndDislike = async () =>
-  {
-      const {id,original_title,poster_path} = items;
-      const data = JSON.parse(await AsyncStorage.getItem("movieZilla"))
-      const {email} = data
-      if(favorite)
-      {
-          // Dislike api
-          const resp = await PostDisLikeData({id,poster_path,original_title});
-      }
-      else
-      {
-        // Like api
-        const resp = await PostLikeData({email,favData:{id,poster_path,original_title}});
-      }
-      setFavorite(!favorite)
-  }
+  const handleLikeAndDislike = async () => {
+    const { id, original_title, poster_path } = items;
+    const data = JSON.parse(await AsyncStorage.getItem("movieZilla"));
+    const { email } = data;
+    if (favorite) {
+      // Dislike api
+      const resp = await PostDisLikeData({ id, poster_path, original_title });
+    } else {
+      // Like api
+      const resp = await PostLikeData({
+        email,
+        favData: { id, poster_path, original_title },
+      });
+    }
+    setFavorite(!favorite);
+  };
 
-  
   return (
     <ScrollView
       contentContainerStyle={{ paddingBottom: 20 }}
@@ -108,9 +115,9 @@ const MovieScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleLikeAndDislike()}>
             {favorite ? (
-              <HeartIcon size={35} color="red" ></HeartIcon>
+              <HeartIcon size={35} color="red"></HeartIcon>
             ) : (
-              <HeartIconOutline size={35} color="red"  ></HeartIconOutline>
+              <HeartIconOutline size={35} color="red"></HeartIconOutline>
             )}
           </TouchableOpacity>
         </SafeAreaView>
@@ -155,7 +162,7 @@ const MovieScreen = () => {
                 <Text
                   key={index}
                   className="text-center  font-semibold text-base"
-                  style={{color:theme.background}}
+                  style={{ color: theme.background }}
                 >
                   {genre.name}
                 </Text>

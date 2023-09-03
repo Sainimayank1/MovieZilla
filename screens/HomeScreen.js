@@ -39,7 +39,17 @@ const HomeScreen = () => {
     getUpcomingMovies();
     getTopRatedMovies();
     getFavoritesMovies();
-  }, []);
+    const get = async () =>
+    {
+      if(fav.length > 0)
+      {
+        const data = JSON.parse(await AsyncStorage.getItem("movieZilla"));
+        data.favorites = fav;
+        await AsyncStorage.setItem("movieZilla",JSON.stringify(data));
+      }
+    }
+    get()
+  },[]);
 
   const getTrendingMovies = async () => {
     setLoading(true);
@@ -100,7 +110,7 @@ const HomeScreen = () => {
           contentContainerStyle={{ paddingBottom: 10 }}
         >
           {/* Trending movies */}
-          {trending.length > 0 && <TrendingMovies data={trending} />}
+          {trending.length > 0 && <TrendingMovies data={trending}/>}
 
           {/* Upcoming movies */}
           {upcoming.length > 0 && (
