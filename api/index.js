@@ -103,7 +103,7 @@ export const PostLikeData = (data) =>
 export const PostDisLikeData = (data) =>
 {
   const endPoint = serverBaseLink + "removefav";
-  console.log(data);
+  return apiCalUser(endPoint,data)
 }
 
 export const fetchFavMovies = (data) =>

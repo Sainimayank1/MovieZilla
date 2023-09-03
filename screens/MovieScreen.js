@@ -46,11 +46,9 @@ const MovieScreen = () => {
     getMovieSimilar(items.id);
 
     const get = async () => {
-        const data = JSON.parse(await AsyncStorage.getItem("movieZilla"));
-        const isFav = data.favorites.filter((item)=> item.id == items.id)
-        console.log(items.id)
-        if(isFav.length > 0)
-          setFavorite(true);
+      const data = JSON.parse(await AsyncStorage.getItem("movieZilla"));
+      const isFav = data.favorites.filter((item) => item.id == items.id);
+      if (isFav.length > 0) setFavorite(true);
     };
     get();
   }, [items]);
@@ -76,7 +74,7 @@ const MovieScreen = () => {
     const { email } = data;
     if (favorite) {
       // Dislike api
-      const resp = await PostDisLikeData({ id, poster_path, original_title });
+      const resp = await PostDisLikeData({ id , email});
     } else {
       // Like api
       const resp = await PostLikeData({

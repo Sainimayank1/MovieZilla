@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  RefreshControl,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
@@ -29,6 +30,7 @@ const ios = Platform.OS == "ios";
 const HomeScreen = () => {
   const [trending, setTrending] = useState([]);
   const [upcoming, setComing] = useState([]);
+  const [isRefresh, setRefresh] = useState(false);
   const [topRated, setTopRated] = useState([]);
   const [fav, setFav] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -49,7 +51,24 @@ const HomeScreen = () => {
       }
     }
     get()
-  },[]);
+  },[isRefresh]);
+  
+  const getData = async () =>{
+    getTrendingMovies();
+    getUpcomingMovies();
+    getTopRatedMovies();
+    getFavoritesMovies();
+    const get = async () =>
+    {
+      if(fav.length > 0)
+      {
+        const data = JSON.parse(await AsyncStorage.getItem("movieZilla"));
+        data.favorites = fav;
+        await AsyncStorage.setItem("movieZilla",JSON.stringify(data));
+      }
+    }
+    get()
+  }
 
   const getTrendingMovies = async () => {
     setLoading(true);
@@ -106,6 +125,9 @@ const HomeScreen = () => {
         <Loading />
       ) : (
         <ScrollView
+           refreshControl={<RefreshControl
+            refreshing={isRefresh} onRefresh={getData}
+          />}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 10 }}
         >
