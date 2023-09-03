@@ -150,14 +150,14 @@ const RegisterScreen = () => {
 
             {/* Register */}
             <View className="flex-row items-center justify-center">
-              <Text className=" text-neutral-400 text-lg font-semibold p-2 ">
+              <Text className=" text-neutral-400 text-md font-semibold p-2 ">
                 Already have an account?
               </Text>
               <TouchableOpacity
                 onPress={() => navigation.goBack()}
                 className="flex items-center"
               >
-                <Text className="text-onahau-500 text-center text-lg"
+                <Text className="text-onahau-500 text-center text-md"
                 style={{color:"#0EABF8"}}
                 >
                   Login

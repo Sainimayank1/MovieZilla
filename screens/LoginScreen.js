@@ -24,7 +24,7 @@ const LoginScreen = () => {
       try {
         const data = await AsyncStorage.getItem("movieZilla");
         if (data) {
-          // navigation.navigate("Home")
+          navigation.navigate("Home")
         }
       } catch (error) {
         console.log(error);
@@ -149,14 +149,14 @@ const LoginScreen = () => {
 
           {/* Register */}
           <View className="flex-row items-center justify-center">
-            <Text className=" text-neutral-400 text-lg font-semibold p-2 ">
+            <Text className=" text-neutral-400 text-md font-semibold p-2 ">
               Don't have an account?
             </Text>
             <TouchableOpacity
               onPress={() => navigation.push("Register")}
               className="flex items-center"
             >
-              <Text className=" text-center text-lg"
+              <Text className=" text-center text-md"
               style={{color:"#0EABF8"}}>
                 Register
               </Text>

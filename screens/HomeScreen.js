@@ -18,16 +18,19 @@ import MovieList from "../components/movieList.js";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../components/Loading.js";
 import {
+  fetchFavMovies,
   fetchTopRatedMovies,
   fetchTrendingMovies,
   fetchUpcomingMovies,
 } from "../api/index.js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ios = Platform.OS == "ios";
 const HomeScreen = () => {
   const [trending, setTrending] = useState([]);
   const [upcoming, setComing] = useState([]);
   const [topRated, setTopRated] = useState([]);
+  const [fav, setFav] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
@@ -35,6 +38,7 @@ const HomeScreen = () => {
     getTrendingMovies();
     getUpcomingMovies();
     getTopRatedMovies();
+    getFavoritesMovies();
   }, []);
 
   const getTrendingMovies = async () => {
@@ -57,6 +61,15 @@ const HomeScreen = () => {
     if (data && data.results) setTopRated(data.results);
     setLoading(false);
   };
+
+  const getFavoritesMovies = async () =>
+  {
+    setLoading(true);
+    const userDetail =JSON.parse(await AsyncStorage.getItem("movieZilla"));
+    const {email} = userDetail;
+    const data = await fetchFavMovies({email});
+    setFav(data?.data?.data);
+  }
 
   return (
     // bg-neutral-800
@@ -97,6 +110,11 @@ const HomeScreen = () => {
           {/* Top Rated Movies*/}
           {topRated.length > 0 && (
             <MovieList title="Top Rated" data={topRated} />
+          )}
+
+          {/* Fav Movies */}
+          {fav.length > 0 && (
+            <MovieList title="Favorite Movies" data={fav} />
           )}
         </ScrollView>
       )}

@@ -19,10 +19,13 @@ import Cast from "../components/Cast";
 import MovieList from "../components/movieList";
 import {
   Image500,
+  PostDisLikeData,
+  PostLikeData,
   fetchMovieCredits,
   fetchMovieDetail,
   fetchMovieSimilar,
 } from "../api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 var { height, width } = Dimensions.get("window");
 const ios = Platform.OS == "ios";
@@ -31,7 +34,7 @@ const topMargin = ios ? "" : "mt-3";
 const MovieScreen = () => {
   const { params: items } = useRoute();
   const navigation = useNavigation();
-  const [favorite, setFavorite] = useState(true);
+  const [favorite, setFavorite] = useState(false);
   const [details, setDetails] = useState({});
   const [cast, setCast] = useState([]);
   const [Similar, setSimilar] = useState([]);
@@ -58,6 +61,25 @@ const MovieScreen = () => {
     setSimilar(data.results);
   };
 
+  const handleLikeAndDislike = async () =>
+  {
+      const {id,original_title,poster_path} = items;
+      const data = JSON.parse(await AsyncStorage.getItem("movieZilla"))
+      const {email} = data
+      if(favorite)
+      {
+          // Dislike api
+          const resp = await PostDisLikeData({id,poster_path,original_title});
+      }
+      else
+      {
+        // Like api
+        const resp = await PostLikeData({email,favData:{id,poster_path,original_title}});
+      }
+      setFavorite(!favorite)
+  }
+
+  
   return (
     <ScrollView
       contentContainerStyle={{ paddingBottom: 20 }}
@@ -84,11 +106,11 @@ const MovieScreen = () => {
               color="white"
             ></ChevronLeftIcon>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setFavorite(!favorite)}>
+          <TouchableOpacity onPress={() => handleLikeAndDislike()}>
             {favorite ? (
-              <HeartIcon size={35} color="red"></HeartIcon>
+              <HeartIcon size={35} color="red" ></HeartIcon>
             ) : (
-              <HeartIconOutline size={35} color="red"></HeartIconOutline>
+              <HeartIconOutline size={35} color="red"  ></HeartIconOutline>
             )}
           </TouchableOpacity>
         </SafeAreaView>

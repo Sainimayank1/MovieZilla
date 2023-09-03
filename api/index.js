@@ -94,6 +94,24 @@ export const PostRegitserData = (data) =>{
   return apiCalUser(endPoint, data);
 }
 
+export const PostLikeData = (data) =>
+{
+  const endPoint = serverBaseLink + "addFav";
+  return apiCalUser(endPoint,data);
+}
+
+export const PostDisLikeData = (data) =>
+{
+  const endPoint = serverBaseLink + "removefav";
+  console.log(data);
+}
+
+export const fetchFavMovies = (data) =>
+{
+  const endPoint = serverBaseLink + "fav";
+  return apiCalUser(endPoint,data);
+}
+
 export const Image500 = (path) =>
   path ? `https://image.tmdb.org/t/p/w500/${path}` : null;
 export const Image342 = (path) =>
