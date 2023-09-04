@@ -17,6 +17,7 @@ import { styles, theme } from "../theme";
 import { LinearGradient } from "expo-linear-gradient";
 import Cast from "../components/Cast";
 import MovieList from "../components/movieList";
+import Loading from "../components/Loading";
 import {
   Image500,
   PostDisLikeData,
@@ -41,6 +42,7 @@ const MovieScreen = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     getMovieDetail(items.id);
     getMovieCredits(items.id);
     getMovieSimilar(items.id);
@@ -51,6 +53,7 @@ const MovieScreen = () => {
       if (isFav.length > 0) setFavorite(true);
     };
     get();
+    setLoading(false);
   }, [items]);
 
   const getMovieDetail = async (id) => {
@@ -86,7 +89,10 @@ const MovieScreen = () => {
   };
 
   return (
-    <ScrollView
+    
+      loading ? <Loading/> : 
+
+      <ScrollView
       contentContainerStyle={{ paddingBottom: 20 }}
       className="flex-1 bg-white "
     >
@@ -180,6 +186,7 @@ const MovieScreen = () => {
         <MovieList title="Similar Movies" hideSeeAll={true} data={Similar} />
       </View>
     </ScrollView>
+    
   );
 };
 

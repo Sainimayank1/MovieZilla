@@ -33,8 +33,10 @@ const SearchScreen = () => {
 
   const getSearchData = async () =>
   {
+      setLoading(true);
       const data = await fetchSearchData(search)
       setResults(data.results)
+      setLoading(false)
   }
 
   return (
