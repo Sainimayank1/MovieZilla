@@ -14,7 +14,7 @@ import { Image342 } from "../api";
 
 var { height, width } = Dimensions.get("window");
 
-const MovieList = ({ data, title, hideSeeAll }) => {
+const MovieList = ({ data, title, hideSeeAll,containerName }) => {
   const navigation = useNavigation();
 
   const handleClick = (item) => {
@@ -28,7 +28,7 @@ const MovieList = ({ data, title, hideSeeAll }) => {
         <Text className="text-neutral-800 text-xl">{title}</Text>
 
         {!hideSeeAll && (
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>navigation.push("AllMovie",containerName)}>
             <Text className="text-lg text-onahau-500" >
               See All
             </Text>

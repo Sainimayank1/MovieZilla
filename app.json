@@ -4,12 +4,12 @@
     "slug": "MovieZilla",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/MovieZilla.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/logo.jpg",
+      "image": "./assets/moviezillaHigh.png",
       "resizeMode": "contain",
-      "backgroundColor": "#000000"
+      "backgroundColor": "#fff"
     },
     "assetBundlePatterns": [
       "**/*"

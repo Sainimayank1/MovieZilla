@@ -3,11 +3,11 @@ import { apiKey } from "../constants/index";
 
 const link = "https://api.themoviedb.org/";
 const trendingMoviesEndPoint = `${link}3/trending/movie/day`;
-const upcomingMoviesEndPoint = `${link}3/movie/upcoming?api_key=${apiKey}`;
+const upcomingMoviesEndPoint = `${link}3/movie/upcoming?api_key=${apiKey}&page=`;
 const topRatedMoviesEndPoint = `${link}3/movie/top_rated?api_key=${apiKey}`;
 const serverBaseLink = "https://moviezilla-jfh9.onrender.com/";
 
-const apiCal = async (endPoint, params) => {
+const apiCal = async (endPoint, params ) => {
   const options = {
     method: "GET",
     url: endPoint,
@@ -22,7 +22,6 @@ const apiCal = async (endPoint, params) => {
     const resp = await axios.request(options);
     return resp.data;
   } catch (error) {
-    console.error(error);
     return {};
   }
 };
@@ -40,12 +39,14 @@ export const fetchTrendingMovies = () => {
   return apiCal(trendingMoviesEndPoint);
 };
 
-export const fetchUpcomingMovies = () => {
-  return apiCal(upcomingMoviesEndPoint);
+export const fetchUpcomingMovies = (page) => {
+  const endPoint = upcomingMoviesEndPoint+page;
+  console.log(endPoint)
+  return apiCal(endPoint);
 };
 
-export const fetchTopRatedMovies = () => {
-  return apiCal(topRatedMoviesEndPoint);
+export const fetchTopRatedMovies = (page) => {
+  return apiCal(topRatedMoviesEndPoint+page);
 };
 
 export const fetchMovieDetail = (id) => {

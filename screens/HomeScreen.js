@@ -68,25 +68,26 @@ const HomeScreen = () => {
       }
     }
     get()
+
   }
 
   const getTrendingMovies = async () => {
     setLoading(true);
-    const data = await fetchTrendingMovies();
+    const data = await fetchTrendingMovies(1);
     if (data && data.results) setTrending(data.results);
     setLoading(false);
   };
 
   const getUpcomingMovies = async () => {
     setLoading(true);
-    const data = await fetchUpcomingMovies();
+    const data = await fetchUpcomingMovies(1);
     if (data && data.results) setComing(data.results);
     setLoading(false);
   };
 
   const getTopRatedMovies = async () => {
     setLoading(true);
-    const data = await fetchTopRatedMovies();
+    const data = await fetchTopRatedMovies(1);
     if (data && data.results) setTopRated(data.results);
     setLoading(false);
   };
@@ -136,17 +137,17 @@ const HomeScreen = () => {
 
           {/* Upcoming movies */}
           {upcoming.length > 0 && (
-            <MovieList title="Upcoming" data={upcoming} />
+            <MovieList title="Upcoming" data={upcoming} containerName={"Upcoming"}/>
           )}
 
           {/* Top Rated Movies*/}
           {topRated.length > 0 && (
-            <MovieList title="Top Rated" data={topRated} />
+            <MovieList title="Top Rated" data={topRated} containerName={"TopRated"}/>
           )}
 
           {/* Fav Movies */}
           {fav.length > 0 && (
-            <MovieList title="Favorite Movies" data={fav} />
+            <MovieList title="Favorite Movies" data={fav} hideSeeAll={true}/>
           )}
         </ScrollView>
       )}

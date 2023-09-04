@@ -19,6 +19,27 @@ const LoginScreen = () => {
   const [msg, setMsg] = useState("");
   const [isLoading, setLoading] = useState(false);
 
+ 
+  const handleSubmit = async () => {
+    setLoading(true);
+    const resp = await PostLoginData(data);
+    setLoading(false);
+    if (resp.status == 400) {
+      setIsError(true);
+    } else {
+      setIsError(false);
+      const data = JSON.stringify(resp.data.details);
+      await AsyncStorage.setItem("movieZilla", data);
+      navigation.navigate("Home")
+    }
+    setModalVisible(true);
+    setMsg(resp.data.msg);
+  };
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   useEffect(() => {
     async function get() {
       try {
@@ -33,24 +54,6 @@ const LoginScreen = () => {
     get();
   }, []);
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    const resp = await PostLoginData(data);
-    setLoading(false);
-    if (resp.status == 400) {
-      setIsError(true);
-    } else {
-      setIsError(false);
-      const data = JSON.stringify(resp.data.details);
-      await AsyncStorage.setItem("movieZilla", data);
-    }
-    setModalVisible(true);
-    setMsg(resp.data.msg);
-  };
-
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
 
   return (
     <View
