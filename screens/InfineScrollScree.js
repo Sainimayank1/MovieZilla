@@ -36,7 +36,7 @@ const InfineScrollScreen = () => {
     setLoading(true);
     if (containerName === "Upcoming") {
       const data = await fetchUpcomingMovies(page);
-      if (data && data.results) setMovies(data.results);
+      if (data && data.results)  setMovies([...movies,...data.results])
       setLoading(false);
     } else {
       const data = await fetchTopRatedMovies(page);
@@ -83,7 +83,7 @@ const InfineScrollScreen = () => {
   const renderLoader = () => {
     return isLoading ? (
       <View>
-        <ActivityIndicator size="large" color="#aaa" />
+        <ActivityIndicator size="large" color="#aaa" className="my-6"/>
       </View>
     ) : null;
   };
